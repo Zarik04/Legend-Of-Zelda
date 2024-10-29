@@ -13,6 +13,8 @@ public class DungeonGenerator : MonoBehaviour
     public Vector2Int size;
     public int startPos = 0;
     public GameObject room;
+    public Vector2 offset;
+
 
     List<Cell> board;
 
@@ -25,9 +27,24 @@ public class DungeonGenerator : MonoBehaviour
     void GenerateDungeon()
     {
 
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                Cell currentCell = board[Mathf.FloorToInt(i + j * size.x)];
+                if (currentCell.visited)
+                {
+                    var newRoom = Instantiate(room, new Vector3(i * offset.x, 0, -j * offset.y), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
+                    newRoom.UpdateRoom(currentCell.status);
+                    newRoom.name += " " + i + "-" + j;
+
+                }
+            }
+        }
+
     }
 
-    void MazeGenerator() 
+    void MazeGenerator()
     {
         board = new List<Cell>();
 
@@ -50,6 +67,11 @@ public class DungeonGenerator : MonoBehaviour
             k++;
 
             board[currentCell].visited = true;
+
+            if(currentCell == board.Count - 1)
+            {
+                break;
+            }
 
             //Check the cell's neighbors
             List<int> neighbors = CheckNeighbors(currentCell);
@@ -105,9 +127,8 @@ public class DungeonGenerator : MonoBehaviour
                 }
 
             }
-            
-        } 
 
+        }
         GenerateDungeon();
     }
 

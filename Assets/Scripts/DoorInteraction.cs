@@ -1,21 +1,27 @@
 using UnityEngine;
 
-public class DoorInteraction : MonoBehaviour
+public class DoorTriggerInteraction : MonoBehaviour
 {
-    public GameObject door; // Reference to the door GameObject
-    public float openAngle = 90f; // Angle to open the door
-    public float openSpeed = 2f; // Speed at which the door opens
-    public KeyCode interactKey = KeyCode.E; // Key to interact with the door
+    public GameObject door; // Reference to the door object
+    public Vector3 hingeOffset = new Vector3(0.1f, 0, 0); // Adjust this for the hinge position (left edge)
+    public float openAngle = -90f; // Angle to open the door
+    public float openSpeed = 2f; // Speed of the door opening
+    public KeyCode interactKey = KeyCode.E; // Interaction key
+    public AudioClip doorOpenSFX; // Sound effect for opening
+    public AudioClip doorCloseSFX; // Sound effect for closing
 
     private bool isOpen = false;
     private bool inRange = false;
     private Quaternion initialRotation;
     private Quaternion openRotation;
+    private Transform playerTransform;
+    private AudioSource audioSource;
 
     void Start()
     {
+        // Set up the initial rotation and audio source
         initialRotation = door.transform.rotation;
-        openRotation = Quaternion.Euler(0, openAngle, 0) * initialRotation;
+        audioSource = door.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -23,15 +29,39 @@ public class DoorInteraction : MonoBehaviour
         if (inRange && Input.GetKeyDown(interactKey))
         {
             isOpen = !isOpen;
+            UpdateOpenRotation();
+            PlaySoundEffect();
         }
 
-        if (isOpen)
+        Quaternion targetRotation = isOpen ? openRotation : initialRotation;
+        RotateDoorAroundHinge(targetRotation);
+    }
+
+    private void UpdateOpenRotation()
+    {
+        if (playerTransform != null)
         {
-            door.transform.rotation = Quaternion.Slerp(door.transform.rotation, openRotation, Time.deltaTime * openSpeed);
+            Vector3 directionToPlayer = playerTransform.position - door.transform.position;
+            float dotProduct = Vector3.Dot(door.transform.forward, directionToPlayer.normalized);
+            float direction = dotProduct > 0 ? 1 : -1;
+            openRotation = Quaternion.Euler(0, direction * openAngle, 0) * initialRotation;
         }
-        else
+    }
+
+    private void RotateDoorAroundHinge(Quaternion targetRotation)
+    {
+        Vector3 hingePoint = door.transform.position + door.transform.TransformDirection(hingeOffset);
+        door.transform.position = hingePoint;
+        door.transform.rotation = Quaternion.Slerp(door.transform.rotation, targetRotation, Time.deltaTime * openSpeed);
+        door.transform.position -= door.transform.TransformDirection(hingeOffset);
+    }
+
+    private void PlaySoundEffect()
+    {
+        if (audioSource != null)
         {
-            door.transform.rotation = Quaternion.Slerp(door.transform.rotation, initialRotation, Time.deltaTime * openSpeed);
+            audioSource.clip = isOpen ? doorOpenSFX : doorCloseSFX;
+            audioSource.Play();
         }
     }
 
@@ -40,7 +70,7 @@ public class DoorInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             inRange = true;
-            Debug.Log("Player near!");
+            playerTransform = other.transform;
         }
     }
 
@@ -49,7 +79,7 @@ public class DoorInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             inRange = false;
-            Debug.Log("Player left!");
+            playerTransform = null;
         }
     }
 }

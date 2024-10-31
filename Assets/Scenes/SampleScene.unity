@@ -383,9 +383,13 @@ MonoBehaviour:
     maxPosition: {x: 10, y: 10}
     obligatory: 0
   - room: {fileID: 4860391640583985259, guid: 864bfdc2b308ee040af7feb24e830159, type: 3}
-    minPosition: {x: 5, y: 5}
+    minPosition: {x: 0, y: 0}
     maxPosition: {x: 10, y: 10}
-    obligatory: 1
+    obligatory: 0
+  - room: {fileID: 4169751260160532757, guid: 44317a26ff31af4449ab60404e72c07f, type: 3}
+    minPosition: {x: 0, y: 0}
+    maxPosition: {x: 10, y: 10}
+    obligatory: 0
   offset: {x: 10, y: 10}
 --- !u!4 &765606007
 Transform:

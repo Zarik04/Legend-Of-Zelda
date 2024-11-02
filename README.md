@@ -14,59 +14,90 @@ The game includes several key features designed to bring the game world to life:
 This project demonstrates a foundational approach to top-down game design, balancing creative design and technical implementation. Through procedural generation and an interactive event system, the game offers a dynamic experience, allowing players to explore unique dungeon layouts and engage with various objects in the game world.
 
 
-## 2. Dungeon Generation
-
-### **Procedural Generation**
+### **Dungeon Generation - Procedural Generation**
 
 #### **Description**
 
-This project’s dungeon generation system utilizes a **Depth-First Search (DFS)** algorithm with **backtracking** and **randomized room selection** to create an interconnected dungeon layout. Using pre-designed assets, rooms are placed on a grid and connected through aligned corridors, creating a visually appealing and diverse dungeon environment.
+This dungeon generation system utilizes a **Depth-First Search (DFS)** algorithm with **backtracking** and **randomized room selection** to create a dynamic, interconnected dungeon layout. Using a grid of various room types, it ensures seamless connections via integrated corridors in each room prefab, resulting in a cohesive, immersive dungeon experience.
 
-1. **Algorithm and Techniques**:
-   - **Depth-First Search (DFS) with Backtracking**:
-     - The dungeon generation begins from a starting room, expanding the layout by visiting random neighboring cells, creating a branching network of rooms. Backtracking enhances layout variety, resulting in both linear and non-linear paths.
-   - **Randomized Room Selection**:
-     - Each room cell is randomly assigned one of three room types—**Empty Room** (default), **Enemy Room**, or **Treasure Room**—based on predefined probabilities. The **RuleManager** script enforces constraints on room distribution, ensuring a balanced experience and strategic placement of specific room types.
-   - **Grid Constraints and Boundary Management**:
-     - Boundary checks prevent out-of-bounds generation, while room placements are validated to avoid overlap. Additional rules, like separating consecutive Enemy Rooms, are managed by the RuleManager.
+#### **Algorithm and Techniques**
 
-2. **Room Types and Placement Rules**:
-   - **Room Types**:
-     - **Empty Room (Default)**: Basic rooms created from the [Stylized Hand Painted Dungeon Free](https://assetstore.unity.com/packages/3d/environments/stylized-hand-painted-dungeon-free-173934) asset, providing transitions between rooms.
-     - **Enemy Room**: Includes enemy models based on characters from the [Starter Assets - Third Person Character Controller](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526) to add combat challenges.
-     - **Treasure Room**: Features rewards such as a [Stylized Treasure Chest](https://assetstore.unity.com/packages/3d/props/stylized-treasure-chest-by-gamertose-87463#content) by Gamertose, incentivizing exploration.
-   - **Placement Rules**:
-     - Room type constraints are enforced through the RuleManager, ensuring balanced types and preventing Enemy Room clustering. Treasure Rooms are placed further from the starting room to reward exploration.
+1. **Depth-First Search (DFS) with Backtracking**:
+   - The `MazeGenerator` method in `DungeonGenerator` creates the dungeon’s branching structure by visiting cells and adding paths using DFS. It starts from a specified cell and expands by visiting random neighboring cells until there are no more unvisited neighbors.
+   - When dead-ends are reached, the algorithm backtracks to explore other paths. This approach generates both linear and branching paths, adding complexity to the dungeon layout.
 
-3. **Graphical Room Connections**:
-   - **Corridor Generation**:
-     - Each room prefab includes integrated corridor sections from the [Stylized Hand Painted Dungeon Free](https://assetstore.unity.com/packages/3d/environments/stylized-hand-painted-dungeon-free-173934) asset, which align with neighboring rooms for seamless connectivity.
-   - **Aligning Entrances/Exits**:
-     - The prefab corridors align perfectly with adjacent rooms, forming natural pathways without requiring extra pathfinding logic.
+2. **Randomized Room Selection**:
+   - The `GenerateDungeon` method randomly assigns one of three room types—**Empty Room**, **Enemy Room**, or **Treasure Room**—to each cell, based on probability.
+   - The `RuleManager` (through the `Rule` class in `DungeonGenerator`) enforces constraints on room placement, such as minimum counts for each type and placement restrictions for certain rooms (e.g., Treasure Rooms appear farther from the starting room). Room type probabilities can vary based on location in the grid.
 
-#### **Implementation**
+3. **Grid Constraints and Boundary Management**:
+   - The algorithm uses grid boundaries to prevent rooms from spawning out of bounds, and room placement respects defined boundaries and avoids overlap.
+   - In `CheckNeighbors`, the script ensures that all neighboring cells are within the grid’s bounds before they are added as potential paths.
+
+#### **Room Types and Placement Rules**
+
+1. **Room Types**:
+   - **Empty Room**: Standard rooms with minimal features.
+   - **Enemy Room**: Rooms containing enemies, created using character models from the [Starter Assets - Third Person Character Controller](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526).
+   - **Treasure Room**: Rooms with treasures from the [Stylized Treasure Chest by Gamertose](https://assetstore.unity.com/packages/3d/props/stylized-treasure-chest-by-gamertose-87463#content).
+
+2. **Placement Rules**:
+   - The `Rule` class defines constraints, including room distribution and placement requirements. It helps prevent consecutive Enemy Rooms and ensures Treasure Rooms are placed farther from the starting point, encouraging exploration.
+   - Each room’s properties are configured in the `RuleManager` to maintain a balanced layout that enhances gameplay flow and prevents monotony.
+
+#### **Graphical Room Connections**
+
+1. **Corridor Generation**:
+   - Instead of using separate corridors, each room prefab includes built-in corridor sections that serve as entrances/exits. `RoomBehaviour` toggles these corridors based on connections, ensuring rooms are visually connected on placement.
+
+2. **Aligning Entrances/Exits**:
+   - The `UpdateRoom` method in `RoomBehaviour` manages doors and walls based on connection status. Each door and wall’s state (open or closed) aligns perfectly with neighboring rooms, providing seamless pathways without additional pathfinding.
+
+#### **Implementation Details**
 
 1. **DungeonGenerator Script**:
-   - This script manages the core dungeon generation, using the DFS algorithm to create and connect rooms with integrated corridor sections for continuity.
+   - The `MazeGenerator` method creates the dungeon layout, using DFS and checking neighbors with `CheckNeighbors` to add paths. Once the layout is complete, `GenerateDungeon` assigns room types.
+   - `GenerateDungeon` instantiates rooms based on the placement rules defined in `RuleManager` and aligns each room with integrated corridors using `RoomBehaviour`.
 
-2. **RoomBehavior Script**:
-   - Handles room-specific interactions, like spawning enemies in Enemy Rooms or activating treasure chests in Treasure Rooms, providing dynamic experiences for players.
+2. **RoomBehaviour Script**:
+   - This script handles each room’s entrances and exits using `UpdateRoom`, ensuring that the correct doors are active based on the dungeon’s layout. 
+   - The room’s entrances and exits adjust dynamically according to `status`, allowing the corridors to align with neighboring rooms for a cohesive layout.
 
-3. **RuleManager Script**:
-   - Enforces constraints on room distribution, ensuring a balanced gameplay experience through structured room placement.
+#### **Code Highlights**
 
-#### **Generation Process Overview**
+Here are some key sections from the `DungeonGenerator` and `RoomBehaviour` scripts:
 
-1. **DFS Algorithm and Expansion**:
-   - Starting from an initial grid position, the DungeonGenerator uses DFS to create a fully connected dungeon, backtracking when necessary.
+- **Room Selection Logic** (from `DungeonGenerator`):
+    ```csharp
+    int randomRoom = -1;
+    List<int> availableRooms = new List<int>();
 
-2. **Room Assignment and Constraints**:
-   - Room types are assigned per RuleManager guidelines, with Enemy and Treasure Rooms placed strategically.
+    for (int k = 0; k < rooms.Length; k++) {
+        int p = rooms[k].ProbabilityOfSpawning(i, j);
+        if (p == 2) {
+            randomRoom = k;
+            break;
+        } else if (p == 1) {
+            availableRooms.Add(k);
+        }
+    }
 
-3. **Graphical Corridor Connection**:
-   - Integrated corridor sections ensure seamless visual and navigational connectivity between rooms.
+    if (randomRoom == -1 && availableRooms.Count > 0) {
+        randomRoom = availableRooms[Random.Range(0, availableRooms.Count)];
+    }
+    ```
 
-This procedural generation system, combined with high-quality assets, produces a cohesive, balanced dungeon structure that feels both organic and rewarding for exploration.
+- **Room Update Method** (from `RoomBehaviour`):
+    ```csharp
+    public void UpdateRoom(bool[] status) {
+        for (int i = 0; i < status.Length; i++) {
+            doors[i].SetActive(status[i]);
+            walls[i].SetActive(!status[i]);
+        }
+    }
+    ```
+
+This implementation enables smooth dungeon generation with diverse room types, ensuring that dungeons feel organically interconnected while retaining structure. The setup creates an immersive dungeon experience that’s balanced for exploration, combat, and rewards.
 
 
 ## 3. Event Handling and Interactions
@@ -207,3 +238,76 @@ This snippet highlights:
 #### **Implementation Notes**
 
 Both **DoorInteraction** and **TreasureChestInteraction** scripts rely on Unity’s Input System and Animator components, leveraging the **Starter Assets - Third Person Character Controller** to manage character movement and input responsiveness.
+
+
+### **4. Project Structure and Asset Overview**
+
+This project is organized into a series of folders designed to house all the elements necessary for the dungeon generation and player interaction system. Here’s a breakdown of the folder structure and contents, along with key assets included in the project:
+
+1. **Prefabs**:  
+   - Contains prefabs for different room types used to generate the dungeon layout. Each room prefab is pre-configured with walls, doors, and potential enemy or treasure placements, allowing for procedural generation within the game.
+
+2. **Scenes**:  
+   - **Sample Scene**: This is the main scene for the project, containing the essential elements to initialize gameplay:
+     - **MainCamera** and **PlayerFollowCamera**: These are set up to follow the player and provide the player’s perspective within the dungeon.
+     - **PlayerArmature**: Equipped with a third-person controller from the **StarterAssets** package, it provides controls and animations for the player character.
+     - **Generator**: This object runs the dungeon generation system, creating rooms as child objects at runtime based on procedural generation.
+
+3. **Scripts**:  
+   - Contains all custom scripts responsible for various aspects of gameplay, including dungeon generation, room behaviors, event handling, and player interactions. Key scripts include:
+     - **DungeonGenerator**: Handles the procedural layout and placement of rooms.
+     - **RoomBehaviour**: Manages the visual setup of each room, including door and wall visibility.
+     - **Interaction Scripts**: Handle player interactions with doors and treasure chests, creating dynamic gameplay.
+
+4. **Sounds**:  
+   - Houses sound effects (sfx) used in the game, specifically for enhancing player interactions with game objects like doors and treasure chests, providing a more immersive experience.
+
+5. **StarterAssets**:  
+   - Includes all essential character assets, animations, and controls needed to manage the player’s third-person perspective and interactions. This package provides 3D character models, player and enemy animations, and controls used to bring the player and enemies to life in the dungeon.
+
+6. **StylizedHandPaintedDungeon**:  
+   - This asset contains room components, such as walls, doors, floors, and decorative elements (like lamps), which are combined within prefabs to create the dungeon’s visual style. These assets allow for a cohesive, hand-painted look across all dungeon rooms.
+
+7. **TreasureChest**:  
+   - Contains a variety of treasure chest models, materials, and textures, which are used in **Treasure Rooms** to reward players. The diversity in chest models adds to the aesthetic value and provides visual rewards to players for their exploration efforts.
+
+Each folder serves a clear purpose, ensuring that all assets and code are neatly organized and accessible, contributing to efficient project management and streamlined gameplay development. This modular structure supports easy additions, modifications, or future expansions. 
+
+
+### **5. Future Enhancements**
+
+To expand the game’s functionality and provide a more engaging experience, several potential improvements could be considered in future iterations:
+
+1. **Enhanced Enemy AI**:  
+   - Develop advanced AI for enemies, enabling them to patrol rooms, pursue the player, and exhibit more complex behaviors based on the player’s actions. Integrating state-based AI (e.g., idle, patrol, attack) can create a more dynamic and challenging environment.
+
+2. **Combat System Implementation**:  
+   - Integrate a combat system with varied attack mechanics, allowing the player to interact with enemies in real-time. This could include basic melee and ranged attacks, combo moves, and power-ups to make combat more engaging.
+
+3. **Additional Room Variants and Puzzles**:  
+   - Introduce new types of rooms and puzzle mechanics to increase gameplay diversity. These could include locked rooms that require specific keys, puzzle rooms where the player must solve riddles to proceed, and mini-boss rooms with unique enemy encounters.
+
+4. **Improved Dungeon Randomization**:  
+   - Refine the dungeon generation algorithm to provide more varied layouts each time the game is played. This could involve introducing a larger pool of room prefabs and modifying the procedural generation rules to prevent predictability and enhance replayability.
+
+5. **Player Progression System**:  
+   - Implement a progression system with elements like experience points, skill upgrades, and unlockable abilities. This would encourage players to continue exploring the dungeon, rewarding them with improved stats and capabilities over time.
+
+6. **Loot and Inventory System**:  
+   - Add an inventory system where players can collect items from treasure chests and defeated enemies. Loot could include health potions, weapons, or unique items that grant special abilities or buffs, enhancing the game's RPG elements.
+
+7. **Multiplayer Mode**:  
+   - Explore the possibility of a multiplayer or co-op mode where players can explore the dungeon together. This would require networking functionalities and synchronization of player actions but could significantly increase the game’s appeal and playtime.
+
+8. **Enhanced Visuals and Animations**:  
+   - Improve the visual appeal by adding more detailed textures, particle effects, and animations for player actions, enemy encounters, and environment interactions. This could include adding lighting effects, shadow casting, and dynamic visual elements like flickering torches or environmental hazards.
+
+9. **Storyline and Quests**:  
+   - Incorporate a storyline or quest system to provide players with a narrative structure, guiding them through the dungeon with specific goals. A storyline with non-playable characters (NPCs) could add depth and motivate players to progress.
+
+10. **Extended Sound Design and Background Music**:  
+   - Add ambient background music and soundscapes for various areas of the dungeon to heighten immersion. Dynamic sound cues based on player actions and environmental interactions (like footsteps or echoes in larger rooms) could also add to the atmosphere.
+
+---
+
+These enhancements would add considerable depth and replay value to the game, making it a more comprehensive and immersive experience for players. By prioritizing features based on development resources, the project can evolve iteratively while continuously engaging users.

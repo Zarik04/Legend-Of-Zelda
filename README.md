@@ -1,6 +1,6 @@
 # Assignment 3: Top-Down Perspective Game Development (Legend of Zelda)
 
-## 1. Project Overview
+## **1. Project Overview**
 
 **Objective**  
 This project is a top-down perspective game inspired by *The Legend of Zelda*, created as part of a Game Development course assignment. The primary goal is to build a functional game that showcases core skills in procedural dungeon generation, event handling, interactive object management, and game presentation within Unity. By focusing on these essential game mechanics, the project emphasizes creating a seamless and engaging experience within a procedurally generated dungeon environment.
@@ -14,7 +14,7 @@ The game includes several key features designed to bring the game world to life:
 This project demonstrates a foundational approach to top-down game design, balancing creative design and technical implementation. Through procedural generation and an interactive event system, the game offers a dynamic experience, allowing players to explore unique dungeon layouts and engage with various objects in the game world.
 
 
-### **Dungeon Generation - Procedural Generation**
+## **2. Dungeon Generation - Procedural Generation**
 
 #### **Description**
 
@@ -100,7 +100,7 @@ Here are some key sections from the `DungeonGenerator` and `RoomBehaviour` scrip
 This implementation enables smooth dungeon generation with diverse room types, ensuring that dungeons feel organically interconnected while retaining structure. The setup creates an immersive dungeon experience that’s balanced for exploration, combat, and rewards.
 
 
-## 3. Event Handling and Interactions
+## **3. Event Handling and Interactions**
 
 ### **Interaction System and Third-Person Player**
 
@@ -240,7 +240,7 @@ This snippet highlights:
 Both **DoorInteraction** and **TreasureChestInteraction** scripts rely on Unity’s Input System and Animator components, leveraging the **Starter Assets - Third Person Character Controller** to manage character movement and input responsiveness.
 
 
-### **4. Project Structure and Asset Overview**
+## **4. Project Structure and Asset Overview**
 
 This project is organized into a series of folders designed to house all the elements necessary for the dungeon generation and player interaction system. Here’s a breakdown of the folder structure and contents, along with key assets included in the project:
 
@@ -274,7 +274,7 @@ This project is organized into a series of folders designed to house all the ele
 Each folder serves a clear purpose, ensuring that all assets and code are neatly organized and accessible, contributing to efficient project management and streamlined gameplay development. This modular structure supports easy additions, modifications, or future expansions. 
 
 
-### **5. Future Enhancements**
+## **5. Future Enhancements**
 
 To expand the game’s functionality and provide a more engaging experience, several potential improvements could be considered in future iterations:
 

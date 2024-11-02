@@ -311,3 +311,21 @@ To expand the game’s functionality and provide a more engaging experience, sev
 ---
 
 These enhancements would add considerable depth and replay value to the game, making it a more comprehensive and immersive experience for players. By prioritizing features based on development resources, the project can evolve iteratively while continuously engaging users.
+
+
+### **6. References**
+
+For further guidance on implementing core aspects of this project, such as dungeon generation, player mechanics, and interaction systems, the following tutorials provide valuable insights:
+
+1. **Dungeon Generation and Room Prefabs**  
+   - [Procedural Dungeon Generation in Unity](https://www.youtube.com/watch?v=gHU5RQWbmWE&t=2s)  
+   - [Building Room Prefabs for Dungeon Generation](https://www.youtube.com/watch?v=gI6G49t--RY&t=3s)
+
+2. **Third Person Controller, Player Physics, and Mechanics**  
+   - [Unity Third Person Character Controller Tutorial](https://www.youtube.com/watch?v=_Er4eqhhDTo&t=176s)  
+   - [Setting Up Player Physics and Mechanics in Unity](https://www.youtube.com/watch?v=keKi5j88dEo&t=222s)
+
+3. **Player Interaction**  
+   - [Unity Player Interaction System Tutorial](https://www.youtube.com/watch?v=6DyHULHqbP8&t=39s)  
+
+These tutorials can serve as foundational resources, offering step-by-step explanations on setting up dungeons, implementing third-person controls, and configuring player interactions to enrich the gameplay experience.

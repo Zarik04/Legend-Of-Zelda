@@ -3,8 +3,8 @@ using UnityEngine;
 public class DoorTriggerInteraction : MonoBehaviour
 {
     public GameObject door; // Reference to the door object
-    public Vector3 hingeOffset = new Vector3(0.1f, 0, 0); // Adjust this for the hinge position (left edge)
-    public float openAngle = -90f; // Angle to open the door
+    public Transform hinge; // Reference to the hinge transform
+    public float openAngle = 90f; // Angle to open the door
     public float openSpeed = 2f; // Speed of the door opening
     public KeyCode interactKey = KeyCode.E; // Interaction key
     public AudioClip doorOpenSFX; // Sound effect for opening
@@ -41,19 +41,20 @@ public class DoorTriggerInteraction : MonoBehaviour
     {
         if (playerTransform != null)
         {
-            Vector3 directionToPlayer = playerTransform.position - door.transform.position;
+            Vector3 directionToPlayer = playerTransform.position - hinge.position; // Use hinge position for direction
             float dotProduct = Vector3.Dot(door.transform.forward, directionToPlayer.normalized);
             float direction = dotProduct > 0 ? 1 : -1;
-            openRotation = Quaternion.Euler(0, direction * openAngle, 0) * initialRotation;
+            openRotation = Quaternion.Euler(0, -direction * openAngle, 0) * initialRotation;
         }
     }
 
     private void RotateDoorAroundHinge(Quaternion targetRotation)
     {
-        Vector3 hingePoint = door.transform.position + door.transform.TransformDirection(hingeOffset);
-        door.transform.position = hingePoint;
+        // Calculate hinge position
+        Vector3 hingePoint = hinge.position; // Use the hinge's transform position directly
+        door.transform.position = hingePoint; // Move door to hinge point
         door.transform.rotation = Quaternion.Slerp(door.transform.rotation, targetRotation, Time.deltaTime * openSpeed);
-        door.transform.position -= door.transform.TransformDirection(hingeOffset);
+        door.transform.position -= hinge.transform.TransformDirection(Vector3.right) * 0.5f; // Adjust back based on door width
     }
 
     private void PlaySoundEffect()

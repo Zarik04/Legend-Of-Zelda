@@ -51,9 +51,9 @@ https://github.com/user-attachments/assets/d1e42d67-5624-4d2a-8169-12dfa29e3a4e
    - The `Rule` class defines constraints, including room distribution and placement requirements. It helps prevent consecutive Enemy Rooms and ensures Treasure Rooms are placed farther from the starting point, encouraging exploration.
    - Each room’s properties are configured in the `RuleManager` to maintain a balanced layout that enhances gameplay flow and prevents monotony.
 
-#### **Graphical Room Connections**
-
 ![Rule](https://github.com/user-attachments/assets/c589d7f2-805f-4d6a-b11b-f3bf8ab06963)
+
+#### **Graphical Room Connections**
 
 1. **Corridor Generation**:
    - Instead of using separate corridors, each room prefab includes built-in corridor sections that serve as entrances/exits. `RoomBehaviour` toggles these corridors based on connections, ensuring rooms are visually connected on placement.

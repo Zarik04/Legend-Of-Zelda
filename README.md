@@ -26,6 +26,8 @@ This dungeon generation system utilizes a **Depth-First Search (DFS)** algorithm
    - The `MazeGenerator` method in `DungeonGenerator` creates the dungeon’s branching structure by visiting cells and adding paths using DFS. It starts from a specified cell and expands by visiting random neighboring cells until there are no more unvisited neighbors.
    - When dead-ends are reached, the algorithm backtracks to explore other paths. This approach generates both linear and branching paths, adding complexity to the dungeon layout.
 
+https://github.com/user-attachments/assets/d1e42d67-5624-4d2a-8169-12dfa29e3a4e
+
 2. **Randomized Room Selection**:
    - The `GenerateDungeon` method randomly assigns one of three room types—**Empty Room**, **Enemy Room**, or **Treasure Room**—to each cell, based on probability.
    - The `RuleManager` (through the `Rule` class in `DungeonGenerator`) enforces constraints on room placement, such as minimum counts for each type and placement restrictions for certain rooms (e.g., Treasure Rooms appear farther from the starting room). Room type probabilities can vary based on location in the grid.
@@ -40,6 +42,10 @@ This dungeon generation system utilizes a **Depth-First Search (DFS)** algorithm
    - **Empty Room**: Standard rooms with minimal features.
    - **Enemy Room**: Rooms containing enemies, created using character models from the [Starter Assets - Third Person Character Controller](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526).
    - **Treasure Room**: Rooms with treasures from the [Stylized Treasure Chest by Gamertose](https://assetstore.unity.com/packages/3d/props/stylized-treasure-chest-by-gamertose-87463#content).
+     
+![Empty Room](https://github.com/user-attachments/assets/314e42b5-f293-4118-99e4-367fd7742f93)
+![Enemy Room](https://github.com/user-attachments/assets/2571543f-1d80-4e17-b70c-88c8d0c80722)
+![Treasure Room](https://github.com/user-attachments/assets/7095af7b-5bb5-42d8-9c6a-c44fccffb3b6)
 
 2. **Placement Rules**:
    - The `Rule` class defines constraints, including room distribution and placement requirements. It helps prevent consecutive Enemy Rooms and ensures Treasure Rooms are placed farther from the starting point, encouraging exploration.
@@ -47,8 +53,12 @@ This dungeon generation system utilizes a **Depth-First Search (DFS)** algorithm
 
 #### **Graphical Room Connections**
 
+![Rule](https://github.com/user-attachments/assets/c589d7f2-805f-4d6a-b11b-f3bf8ab06963)
+
 1. **Corridor Generation**:
    - Instead of using separate corridors, each room prefab includes built-in corridor sections that serve as entrances/exits. `RoomBehaviour` toggles these corridors based on connections, ensuring rooms are visually connected on placement.
+
+![Corridor](https://github.com/user-attachments/assets/6127c5c9-da91-43f4-a47b-cf420c9c6aec)
 
 2. **Aligning Entrances/Exits**:
    - The `UpdateRoom` method in `RoomBehaviour` manages doors and walls based on connection status. Each door and wall’s state (open or closed) aligns perfectly with neighboring rooms, providing seamless pathways without additional pathfinding.

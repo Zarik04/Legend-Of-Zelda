@@ -143,6 +143,8 @@ Key functionalities within the `DoorInteraction` script include:
 - **Opening the Door**: When the player interacts with the door (using a specified input key), the door opens, playing an assigned animation.
 - **Feedback**: The player receives feedback through a UI prompt, guiding them to interact when near the door.
 
+![door](https://github.com/user-attachments/assets/54e61e9a-744b-46dc-ac14-a761ed36c882)
+
 #### **Key Code Snippet**
 
 Here is an essential part of the **DoorInteraction** script:
@@ -201,6 +203,8 @@ Key functionalities within the `TreasureChestInteraction` script include:
 - **Proximity Detection**: Recognizes when the player is close enough to interact with the chest.
 - **Opening the Chest**: Activates the treasure chest’s opening animation and triggers any associated rewards or effects.
 - **Feedback**: Provides feedback, such as sound effects or UI prompts, to indicate that the chest is ready to be opened.
+
+![treasure](https://github.com/user-attachments/assets/eb168705-26d5-4e34-9f0a-c0c94f1af514)
 
 #### **Key Code Snippet**
 
